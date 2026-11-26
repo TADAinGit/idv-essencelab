@@ -112,6 +112,12 @@ def main():
     user_crossover = read(user_crossover_path)['records'] if user_crossover_path.exists() else {}
     coa_path = ROOT / 'research/coa-art/manifest.json'
     coa_art = read(coa_path)['records'] if coa_path.exists() else {}
+    overrides = read(ROOT/'tools/web-art-overrides.json')['records']
+    for record in overrides.values():
+        for art in record.values():
+            target = ROOT/'public'/art['url'].lstrip('/')
+            if not target.resolve().is_relative_to((ROOT/'public/season-art').resolve()) or sha(target) != art['sha256']:
+                raise ValueError('Presentation override path/hash mismatch')
     for box in catalog['boxes']:
         reference_icon,reference_poster = reference_art(box,references)
         summary = {field: box.get(field) for field in
@@ -135,8 +141,14 @@ def main():
                     raise ValueError('COA artwork path/hash mismatch')
             icon = coa_art[box['id']]['icon']
             summary.update(image=icon['url'],iconStatus='external-reference',iconSource=public_source(icon))
+        override = overrides.get(box['id'], {})
+        if 'icon' in override:
+            icon = override['icon']
+            summary.update(image=icon['url'],iconStatus='external-reference',iconSource=public_source(icon))
         summaries.append(summary)
         full = dict(box)
+        if 'icon' in override:
+            full.update(image=summary['image'],iconStatus=summary['iconStatus'],iconSource=summary['iconSource'])
         if box['id'] in coa_art:
             full.update(image=summary['image'],iconStatus=summary['iconStatus'],iconSource=summary['iconSource'])
         if not full.get('image') and reference_icon:
@@ -167,6 +179,9 @@ def main():
             if not target.resolve().is_relative_to((ROOT/'public/crossover-art').resolve()) or sha(target) != art['sha256']:
                 raise ValueError('User crossover artwork path/hash mismatch')
             full.update(banner=art['url'],bannerSource={k:art[k] for k in ['origin','nativeAliasProven','url','sha256','width','height']},bannerKind='reference-poster',bannerViewport=[0,0,1,1],bannerFit='contain')
+        if 'banner' in override:
+            art = override['banner']
+            full.update(banner=art['url'],bannerSource=art,bannerKind='reference-poster',bannerViewport=[0,0,1,1],bannerFit='contain')
         needed = {entry['key'] for entries in box['pools'].values() for entry in entries}
         if box['id'] in coa_art:
             art = coa_art[box['id']]['banner']

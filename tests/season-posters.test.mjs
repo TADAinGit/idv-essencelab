@@ -5,15 +5,16 @@ import {createHash} from 'node:crypto';
 const root=new URL('../',import.meta.url),json=async p=>JSON.parse(await readFile(new URL(p,root),'utf8'));
 test('seasonal artwork keeps verified hashes, exact Essence sections and immutable source pools',async()=>{
  const report=await json('research/season-posters/reference-art.json'),source=await json('public/data/catalog.json');
+ const overrides=(await json('tools/web-art-overrides.json')).records;
  assert.equal(Object.keys(report.records).length,94);assert.deepEqual(report.downloadErrors,{});
  for(const [id,r] of Object.entries(report.records)){
   const {box}=await json(`public/data/v2/boxes/${id}.json`),original=source.boxes.find(b=>b.id===id);
   assert.deepEqual(box.configuration,original.configuration);assert.deepEqual(box.pools,original.pools);
-  assert.equal(box.banner,r.url);assert.equal(box.bannerSource.nativeAliasProven,false);
+  assert.equal(box.banner,overrides[id]?.banner?.url??r.url);assert.equal(box.bannerSource.nativeAliasProven,false);
   assert.equal(createHash('sha256').update(await readFile(new URL('public'+r.url,root))).digest('hex'),r.sha256);
   assert.match(r.section,new RegExp('Essence\\s*'+r.wikiEssence+'\\b','i'));
   assert.equal(box.bannerKind,r.presentation==='strip'?'reference-strip':'reference-poster');
-  assert.deepEqual(box.bannerViewport,r.viewport);
+  assert.deepEqual(box.bannerViewport,overrides[id]?.banner?[0,0,1,1]:r.viewport);
   const [l,t,right,bottom]=r.viewport;
   assert.ok(l>=0&&t>=0&&right<=1&&bottom<=1&&right>l&&bottom>t,`bounded artwork viewport ${id}`);
  }

@@ -1,3 +1,4 @@
+import {installSiteNotice} from './site-notice.js';
 import {drawProgress,progressCopy} from './draw-progress.js';
 import {collectionItems} from './collection-filters.js';
 import {installOrientationGuard} from './orientation-guard.js';
@@ -113,11 +114,12 @@ try{const player=await import('./game-fx/player.js');await player.playOpening({c
 $('results-grid').innerHTML=batch.results.map((r,i)=>{const item=catalog.rewards[r.key],name=item.name?.startsWith('TID_')?item.typeName:item.name;return `<button class="result-card" data-reward="${esc(r.key)}" data-type="${item.type}" data-quality="${item.quality||1}" style="--i:${i}" title="${esc(name)}" aria-label="${esc(name)} · ${r.duplicate?'Nhận trùng':'Mới'}">${rewardVisual(item,nativeRewardSkin,{owned:r.duplicate})}</button>`;}).join('');$('results-grid').dataset.count=count;$('results-dialog').dataset.theme=resultTheme(batch.results,catalog.rewards);$('results-again').textContent=`Mở tiếp ${count}`;$('results-dialog').showModal();say('');}catch(error){audio.finish(true);say('Không thể mở: '+error.message,true);}finally{openingBusy=false;renderMode();}}
 function downloadState(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`essencelab-collection-${state.total}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),2000);say('Đã lưu bộ sưu tập.');}
 function wire(){
+ installSiteNotice();
  const filters=document.querySelector('.library-filters');
  document.addEventListener('pointerdown',event=>{if(filters.open&&!filters.contains(event.target))filters.open=false;});
- filters.addEventListener('focusout',()=>queueMicrotask(()=>{if(!filters.contains(document.activeElement))filters.open=false;}));
+
  filters.addEventListener('keydown',event=>{if(event.key==='Escape'){filters.open=false;filters.querySelector('summary').focus();}});
- window.addEventListener('blur',()=>{filters.open=false;});
+
 
  let refreshing=false;
  const activity=()=>{refreshGuest(true).catch(error=>say('Không lưu được tiến trình: '+error.message,true));};

@@ -1,0 +1,27 @@
+{
+  "records": {
+    "291": {
+      "banner": {
+        "url": "/season-art/31466a9e25140600f9eb75038d62e7952d73ee4beaf1083ca226998149c518ec.png",
+        "sha256": "31466a9e25140600f9eb75038d62e7952d73ee4beaf1083ca226998149c518ec",
+        "width": 1672,
+        "height": 941,
+        "origin": "user-supplied",
+        "nativeAliasProven": false
+      }
+    },
+    "134001": {
+      "icon": {
+        "sha256": "28d2a407f51f79a5a4a3d4d77a0e4ec864f6064f223328b7e2acb178d2df6863",
+        "width": 512,
+        "height": 512,
+        "origin": "Identity V Wiki / Essences",
+        "nativeAliasProven": false,
+        "context": "https://id5.fandom.com/wiki/Essences",
+        "filePage": "https://id5.fandom.com/wiki/File:Golden_Rose_Theater_Essence_(S12_E1).png",
+        "originalUrl": "https://static.wikia.nocookie.net/id5/images/5/5d/Golden_Rose_Theater_Essence_(S12_E1).png",
+        "url": "/season-art/28d2a407f51f79a5a4a3d4d77a0e4ec864f6064f223328b7e2acb178d2df6863.png"
+      }
+    }
+  }
+}

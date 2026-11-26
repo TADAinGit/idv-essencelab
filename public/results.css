@@ -67,3 +67,10 @@
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .native-reward{container-type:inline-size}
 .native-reward .native-name{left:50%;transform:translate(-50%,-50%);font-size:clamp(5px,10cqw,16px);line-height:1.1;overflow-wrap:anywhere;text-wrap:balance;text-align:center;height:18%;max-height:none;display:flex;align-items:center;justify-content:center;}
+
+/* Compact A-tier bloom; avoid compounded wide purple shadows. */
+.results-dialog .native-reward.q4{filter:drop-shadow(0 0 2px #df73ff) drop-shadow(0 0 5px #c63de5a6)}
+.results-dialog .native-reward.q4 .native-frame{filter:brightness(1.12) drop-shadow(0 0 3px #d05aeb) drop-shadow(0 0 6px #c63de566)}
+/* Explicit text box avoids Safari's anonymous flex-text alignment and cqw rounding. */
+.native-reward .native-name{left:0;right:0;width:100%;box-sizing:border-box;padding:0 5%;transform:translateY(-50%);display:grid;place-items:center;letter-spacing:normal;text-indent:0}
+.native-name-text{display:block;width:100%;min-width:0;max-height:100%;text-align:center;overflow:hidden;overflow-wrap:anywhere;line-height:1.1}
