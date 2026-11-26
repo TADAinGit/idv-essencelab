@@ -58,3 +58,14 @@ test('published gacha sounds retain verified Wwise identities and Ogg hashes wit
  assert.equal(report.assets.one.event,'P_dwrg_ui2_ui_box_one');assert.equal(report.assets.ten.event,'P_dwrg_ui2_ui_box_ten');
  assert.doesNotMatch(JSON.stringify(gachaSounds),/source_archive|source_offset|[A-Z]:[\\/]/);
 });
+
+test('returning from another app replaces even a running-but-silent context on the next gesture',async()=>{
+ const visibility=new EventTarget();visibility.hidden=false;const contexts=[],started=[];
+ const player=createGachaAudio({visibility,fetchAudio:async url=>url,createContext(){
+  const index=contexts.length;const ctx={state:'suspended',destination:{},resume(){this.state='running';return Promise.resolve();},close(){this.state='closed';return Promise.resolve();},decodeAudioData:async name=>({name}),createGain:()=>({gain:{},connect(){},disconnect(){}}),createBufferSource:()=>({connect(){},disconnect(){},start(){started.push(index);},stop(){}})};contexts.push(ctx);return ctx;
+ }});
+ const first=player.begin(10);assert.equal(contexts[0].state,'running');await first.ready;first.playOpening();first.finish(false);
+ visibility.hidden=true;visibility.dispatchEvent(new Event('visibilitychange'));visibility.hidden=false;visibility.dispatchEvent(new Event('visibilitychange'));
+ assert.equal(contexts.length,1);const second=player.begin(10);assert.equal(contexts.length,2);assert.equal(contexts[0].state,'closed');assert.equal(contexts[1].state,'running');await second.ready;second.playOpening();assert.ok(started.includes(1));second.finish(false);
+ contexts[1].state='closed';const third=player.begin(1);assert.equal(contexts.length,3);await third.ready;third.playOpening();assert.ok(started.includes(2));third.finish(true);
+});

@@ -1,3 +1,4 @@
+import {installOrientationGuard} from './orientation-guard.js';
 import {GuestSession,SESSION_KEY,refillCountdown} from './guest-session.js';
 import {editableRates,matchesDefaultRates,posterFit} from './rate-settings.js';
 import {beginGachaAudio,setGachaAudioSettings} from './game-fx/audio.js';
@@ -101,7 +102,7 @@ async function openProfile(count=null){pendingDrawCount=Number.isInteger(count)?
  $('weight-inputs').innerHTML=['1','2','3','4','5'].map(g=>`<label class="g${g}">${selected.category==='rank'?rankGradeLabels[g]:'Bậc '+g} (%)<input name="grade${g}" type="number" step="any" min="0" max="100" ${!selected.pools[g]?.length?'disabled':''} required></label>`).join('');
  $('profile-form').elements.seed.value=state.seed;$('profile-form').elements.consent.checked=!!activeProfile;$('profile-error').textContent='';fillRateDraft(p);$('config-dialog').showModal();}
 function updateWeightTotal(){const form=$('profile-form');const sum=['1','2','3','4','5'].reduce((n,g)=>n+Number(form.elements['grade'+g]?.value||0),0);$('weight-total').textContent=`Tổng xác suất: ${Number(sum.toFixed(6))}%`;$('weight-total').classList.toggle('error',Math.abs(sum-100)>.00001);$('custom-consent').hidden=false;}
-async function openBatch(count){if(openingBusy)return;openingBusy=true;renderMode();try{await refreshGuest(true);}catch(error){openingBusy=false;renderMode();say('Không lưu được tiến trình: '+error.message,true);return;}if(!currentProfile()){openingBusy=false;renderMode();await openProfile(count);return;}const audio=beginGachaAudio(count);openingBusy=true;lastBatchCount=count;renderMode();try{await ensureState();await ensureRewardSkin();const openingBox=selected;const committed=await guest.draw(count,async saved=>{
+async function openBatch(count){if(openingBusy||matchMedia('(max-width:1100px) and (orientation:portrait)').matches)return;const audio=beginGachaAudio(count);openingBusy=true;renderMode();try{await refreshGuest(true);}catch(error){audio.finish(true);openingBusy=false;renderMode();say('Không lưu được tiến trình: '+error.message,true);return;}if(!currentProfile()){audio.finish(true);openingBusy=false;renderMode();await openProfile(count);return;}openingBusy=true;lastBatchCount=count;renderMode();try{await ensureState();await ensureRewardSkin();const openingBox=selected;const committed=await guest.draw(count,async saved=>{
  state=createState(state.seed);pendingSave=saved?JSON.parse(saved):null;await ensureState();
  return drawBatch(state,openingBox,currentProfile(),count);
 });const batch=committed.batch;guestSnapshot=committed.session;state=batch.state;updateOwned();renderWallet();renderPool();
@@ -109,6 +110,12 @@ try{const player=await import('./game-fx/player.js');await player.playOpening({c
 $('results-grid').innerHTML=batch.results.map((r,i)=>{const item=catalog.rewards[r.key],name=item.name?.startsWith('TID_')?item.typeName:item.name;return `<button class="result-card" data-reward="${esc(r.key)}" data-type="${item.type}" data-quality="${item.quality||1}" style="--i:${i}" title="${esc(name)}" aria-label="${esc(name)} · ${r.duplicate?'Nhận trùng':'Mới'}">${rewardVisual(item,nativeRewardSkin,{owned:r.duplicate})}</button>`;}).join('');$('results-grid').dataset.count=count;$('results-dialog').dataset.theme=resultTheme(batch.results,catalog.rewards);$('results-again').textContent=`Mở tiếp ${count}`;$('results-dialog').showModal();say('');}catch(error){audio.finish(true);say('Không thể mở: '+error.message,true);}finally{openingBusy=false;renderMode();}}
 function downloadState(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=`essencelab-collection-${state.total}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),2000);say('Đã lưu bộ sưu tập.');}
 function wire(){
+ const filters=document.querySelector('.library-filters');
+ document.addEventListener('pointerdown',event=>{if(filters.open&&!filters.contains(event.target))filters.open=false;});
+ filters.addEventListener('focusout',()=>queueMicrotask(()=>{if(!filters.contains(document.activeElement))filters.open=false;}));
+ filters.addEventListener('keydown',event=>{if(event.key==='Escape'){filters.open=false;filters.querySelector('summary').focus();}});
+ window.addEventListener('blur',()=>{filters.open=false;});
+
  let refreshing=false;
  const activity=()=>{refreshGuest(true).catch(error=>say('Không lưu được tiến trình: '+error.message,true));};
  for(const type of ['pointerdown','keydown'])document.addEventListener(type,activity,{passive:true});
@@ -146,6 +153,6 @@ function wire(){
  window.addEventListener('popstate',async()=>{const route=readRoute(location);await navigate(route.view,false);if(route.view==='library'&&route.essence&&route.essence!==selected.id)await setBox(route.essence);});
 }
 async function boot(){try{const index=await getJSON('/data/v2/index.json');catalog={...index,rewards:{},accumulate:[]};state=createState();guest=new GuestSession(localStorage);try{const session=await refreshGuest(true);if(session.save)pendingSave=JSON.parse(session.save);}catch{say('Không đọc được bộ sưu tập.',true);}
- const seasons=[...new Set(catalog.boxes.map(boxSeason).filter(Boolean))].sort((a,b)=>b-a);$('season').insertAdjacentHTML('beforeend',seasons.map(s=>`<option value="${s}">Season ${s}</option>`).join(''));$('box-total').textContent=num(catalog.boxes.length);const route=readRoute(location);selected=findBox(route.essence)||findBox('513')||catalog.boxes[0];wire();try{$('restore-collection').hidden=!guestSnapshot.backup;}catch{}renderBoxList();renderStage();updateOwned();document.body.dataset.page=route.view;await applyGameSkin();$('app').hidden=false;if(['collection','history'].includes(route.view))await navigate(route.view,false);else await setBox(selected.id);say('');if(location.hash.startsWith('#assets'))history.replaceState({},'','/');
+ const seasons=[...new Set(catalog.boxes.map(boxSeason).filter(Boolean))].sort((a,b)=>b-a);$('season').insertAdjacentHTML('beforeend',seasons.map(s=>`<option value="${s}">Season ${s}</option>`).join(''));$('box-total').textContent=num(catalog.boxes.length);const route=readRoute(location);selected=findBox(route.essence)||findBox('513')||catalog.boxes[0];wire();try{$('restore-collection').hidden=!guestSnapshot.backup;}catch{}renderBoxList();renderStage();updateOwned();document.body.dataset.page=route.view;await applyGameSkin();$('app').hidden=false;if(['collection','history'].includes(route.view))await navigate(route.view,false);else await setBox(selected.id);say('');installOrientationGuard();if(location.hash.startsWith('#assets'))history.replaceState({},'','/');
  }catch(error){$('load-error').hidden=false;$('load-message').textContent=error.message;say('Không tải được trang. Vui lòng thử lại.',true);$('reload').onclick=()=>location.reload();}}
 boot();

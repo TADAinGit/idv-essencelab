@@ -62,3 +62,8 @@
 @keyframes result-arrive{from{opacity:0;translate:0 15px}to{opacity:1;translate:0 0}}
 @media(max-height:600px){.results-heading{padding:2vh 20px}.results-grid{width:min(66vw,1000px);gap:3vh 4vw;margin:2vh auto}.result-card{max-height:26vh;width:auto;height:26vh}.results-footer button{height:16vh}.results-grid[data-count="1"]{margin-top:5vh}.results-grid[data-count="1"] .result-card{height:40vh;max-height:40vh}.results-footer{padding:0 12px 2vh}}
 @media(prefers-reduced-motion:reduce){.result-card{animation:none}}
+
+/* Prevent iOS text inflation; size names to their own card, not the viewport. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.native-reward{container-type:inline-size}
+.native-reward .native-name{left:50%;transform:translate(-50%,-50%);font-size:clamp(5px,10cqw,16px);line-height:1.1;overflow-wrap:anywhere;text-wrap:balance;text-align:center;height:18%;max-height:none;display:flex;align-items:center;justify-content:center;}
