@@ -1,0 +1,11 @@
+import {spawn} from 'node:child_process';
+import path from 'node:path';
+import {buildPages,ROOT,PROJECT} from './build-pages.mjs';
+const args=process.argv.slice(2);
+if(args.some(a=>!['--preview','--production'].includes(a))||args.length!==1)throw Error('Specify --preview or --production.');
+const branch=args[0]==='--production'?'main':'review';
+const run=(script,args)=>new Promise((resolve,reject)=>{const proc=spawn(process.execPath,[script,...args],{cwd:ROOT,stdio:'inherit',windowsHide:true});proc.on('error',reject);proc.on('exit',code=>code===0?resolve():reject(Error('Command failed: '+code)));});
+await run(path.join(ROOT,'node_modules/wrangler/bin/wrangler.js'),['whoami']);
+await run(path.join(ROOT,'tools/check-pages.mjs'),['--tests']);
+const build=await buildPages();console.log(`Publishing ${build.files} files (${build.bytes} bytes), manifest ${build.manifestSha256}`);
+await run(path.join(ROOT,'node_modules/wrangler/bin/wrangler.js'),['pages','deploy',build.output,'--project-name',PROJECT,'--branch',branch,'--commit-dirty=true']);

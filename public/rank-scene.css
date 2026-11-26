@@ -1,0 +1,19 @@
+body[data-page="library"] .stage.is-rank .poster-image{pointer-events:none}
+body[data-page="library"] .stage.is-rank .poster-image .rank-curtain{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+.rank-showcase{position:absolute;inset:0}
+.rank-reward{position:absolute;left:var(--slot-x);top:var(--slot-y);width:19%;aspect-ratio:1;min-height:0;padding:0;border:0;border-radius:0;box-shadow:none;background:none!important;transform:translate(-50%,-50%) rotate(var(--slot-angle)) scale(var(--slot-scale));pointer-events:auto;filter:drop-shadow(12px 18px 5px #35050a99)}
+.rank-reward:hover{filter:brightness(1.15) drop-shadow(12px 18px 5px #35050a99)}
+.rank-reward .native-reward{--native-width:100%!important}
+.rank-reward .native-reward{filter:drop-shadow(0 0 2px var(--native-color))}
+.rank-reward img{image-rendering:high-quality}
+body[data-page="library"] .rank-intro{position:absolute;left:7%;right:7%;top:63%;text-align:center;color:#fff0d9;text-shadow:1px 3px 4px #26060b;pointer-events:none}
+body[data-page="library"] .stage .rank-intro h2{display:block;font-size:clamp(1rem,2.7vw,3.5rem);line-height:1.1;letter-spacing:.02em;margin:0 0 8px}
+.rank-intro p{font-size:clamp(.7rem,1.05vw,1.2rem);line-height:1.25;max-width:88%;margin:auto;white-space:pre-line}
+.item-story h3{font-size:1.2rem;color:#d7bd84;margin-top:18px}
+.item-story .item-description{white-space:pre-line;font-size:1.05rem;line-height:1.6;color:#ddd2bf}
+@media(max-width:1100px){body[data-page="library"] .stage .rank-intro h2{font-size:clamp(.85rem,2.8vw,2rem);margin-bottom:3px}.rank-intro p{font-size:clamp(.6rem,1vw,.9rem)}}
+
+body[data-page="library"] .stage.is-season-showcase .rank-reward{width:20%;transform:translate(-50%,-50%);filter:drop-shadow(0 10px 8px #35050a99)}
+body[data-page="library"] .stage.is-season-showcase .rank-reward:first-child{z-index:1;width:23%;top:35%}
+body[data-page="library"] .stage.is-season-showcase .rank-reward:hover{filter:brightness(1.12) drop-shadow(0 10px 8px #35050a99)}
+body[data-page="library"] .stage.is-season-showcase .rank-intro{top:66%}

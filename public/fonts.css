@@ -1,0 +1,9 @@
+/* Original Vietnamese locale font, not the default Chinese pop1w5 face.
+   pack_config.update_language_cocos_engine_config offsets 2198–2266:
+   LANGUAGE_VI -> font/font_vi.ttc -> enable_font_replace_in_load.
+   Source bytes are SFNT TrueType despite their original .ttc suffix. */
+@font-face{font-family:IdentityVVietnamese;src:url('/game-ui/font-vi.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+:root{--ui-font:IdentityVVietnamese,'Segoe UI',sans-serif;font-family:var(--ui-font)}
+body,body :not(code,pre){font-family:var(--ui-font)!important;font-style:normal!important;font-synthesis:none;font-kerning:normal}
+body :is(h1,h2,h3,button,.result-name,.gacha-tool){font-weight:400;letter-spacing:normal}
+pre,code,pre *{font-family:Consolas,monospace!important}

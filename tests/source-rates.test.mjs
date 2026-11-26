@@ -1,0 +1,35 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {sourceProfile,sourceProbabilities} from '../public/source-rates.js';
+import {createState,drawBatch,profileKey,validateState} from '../public/engine.js';
+const data=JSON.parse(await readFile(new URL('../public/data/v2/boxes/513.json',import.meta.url)));
+const box=data.box,p=sourceProfile(box);
+test('ordinary-season model uses source increments and its own 200/250 pity',()=>{
+ assert.equal(p.pity['5'],200);assert.equal(p.pity['4'],60);assert.equal(p.pity['3'],10);
+ const first=sourceProbabilities(p),thirtieth=sourceProbabilities(p,{'3':0,'4':29,'5':29});
+ assert.equal(first.rates['5'],box.configuration.grade_rate_5);
+ assert.ok(Math.abs(thirtieth.rates['5']*100-.14925)<1e-8);
+ assert.ok(Math.abs(thirtieth.rates['4']*100-2.456)<.002);
+ assert.ok(Math.abs(Object.values(thirtieth.rates).reduce((a,b)=>a+b,0)-1)<1e-12);
+ const sixty=sourceProbabilities(p,{'3':9,'4':59,'5':59});
+ assert.equal(sixty.rates['3'],0);assert.equal(sixty.rates['2'],0);assert.equal(sixty.rates['1'],0);
+ assert.ok(sixty.rates['5']>0);assert.equal(sixty.rates['4'],1-sixty.rates['5']);
+ assert.equal(sourceProbabilities(p,{'5':199}).rates['5'],1);
+ const older=structuredClone(box);older.configuration.grade_add_5[1]=250;older.configuration.drop_rate_tid='TID_TREASURE_GAILV_CONTENT_SAIJI';
+ assert.equal(sourceProfile(older).pity['5'],250);
+ assert.equal(sourceProfile({...box,category:'rank'}),null);
+});
+test('source draws keep state isolated from sandbox and roundtrip complete B/A/S counters',()=>{
+ const initial=createState('source-tests');const ten=drawBatch(initial,box,p,10);
+ let sequential=initial;for(let i=0;i<10;i++)sequential=drawBatch(sequential,box,p).state;
+ assert.deepEqual(ten.state,sequential);assert.equal(initial.total,0);
+ assert.equal(ten.state.history[0].mode,'source-config');
+ assert.ok(ten.results.some(r=>Number(r.grade)>=3));
+ assert.deepEqual(validateState(ten.state,{boxes:[box],rewards:data.rewards}),ten.state);
+ const due=createState('pity');due.counters[profileKey(box,p)]={'3':9,'4':59,'5':199};
+ const pulled=drawBatch(due,box,p);assert.equal(pulled.results[0].grade,'5');
+ assert.deepEqual(pulled.state.counters[profileKey(box,p)],{'3':0,'4':0,'5':0});
+ const altered=structuredClone(ten.state);altered.history[0].profile.pity['5']=1;
+ assert.throws(()=>validateState(altered,{boxes:[box],rewards:data.rewards}));
+});

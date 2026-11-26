@@ -1,0 +1,49 @@
+/* Native PNGs, decoded from game DDS and bound to exact CSB nodes in skin.json.
+   Layout adapts to the browser; this file adds no replacement opening effects. */
+.topbar .nav{display:inline-flex;align-items:center;text-decoration:none}
+body.game-skin[data-page="library"]{background:#0b0d15 var(--native-background) center/cover fixed no-repeat}
+body.game-skin[data-page="library"] .topbar,body.game-skin[data-page="library"] .notice{background:transparent;border-color:transparent}
+body.game-skin[data-page="library"] .workspace{position:relative;background:transparent}
+.game-skin .workspace:before,.game-skin .workspace:after{content:"";position:absolute;bottom:0;pointer-events:none;z-index:-1;width:18%;height:62%;background-repeat:no-repeat;background-position:bottom;background-size:contain}
+.game-skin .workspace:before{left:12%;background-image:var(--native-treeLeft)}
+.game-skin .workspace:after{right:0;background-image:var(--native-treeRight)}
+.game-skin .library-panel{background:transparent;border:0}
+.game-skin .box-item,.game-skin .box-item.selected{background:transparent;box-shadow:none;border:0;border-radius:0;clip-path:none}
+.game-skin .box-item:hover{background:var(--native-listBackground) center/100% 100% no-repeat}
+.game-skin .box-item{background:var(--native-tabNormal) center/100% 100% no-repeat}
+.game-skin .box-item.selected{background:var(--native-selected) center/100% 100% no-repeat}
+.game-skin .box-item:after{display:none}
+.game-skin .stage{border:0;border-radius:0;background:none;box-shadow:none;overflow:hidden}
+.game-skin .stage:before,.game-skin .stage:after{display:none}
+.game-skin .poster-image{inset:0;border:0;box-shadow:none}
+.game-skin .poster-image img{filter:none}
+.game-skin .poster-image:after{background:none}
+.game-skin .orbit,.game-skin .pedestal{display:none}
+.game-skin .hero-image img{animation:none;filter:none}
+.game-skin .stage-top{background:transparent;border:0}
+.game-skin .stage-copy{background:transparent!important;box-shadow:none}
+.game-skin .stage h2,.game-skin .stage-stats,.game-skin .stage-tags{text-shadow:0 2px 3px #000}
+.game-skin .stage-description{display:none}
+.game-skin .draw-console{background:transparent;border:0;box-shadow:none}
+.game-skin .draw-actions{justify-content:center;align-items:center;gap:18px}
+.game-skin .draw-actions button,.game-skin .draw-actions #draw-ten{flex:0 1 284px;height:148px;min-height:0;padding:0 14px 40px;border:0;border-radius:0;box-shadow:none;clip-path:none;font-family:Georgia,"Times New Roman",serif;font-size:1.8rem;font-weight:400;font-style:italic;line-height:1.1;color:#251b0d;filter:none;text-shadow:none;background-color:transparent;background-position:center;background-size:100% 100%;background-repeat:no-repeat;transform:none}
+.game-skin #draw-one{background-image:var(--native-openOne)}
+.game-skin .draw-actions #draw-ten{background-image:var(--native-openTen)}
+.game-skin .draw-actions #draw-ten:disabled{background-image:var(--native-openTenDisabled)}
+.game-skin .draw-actions button:hover:not(:disabled){background-color:transparent;transform:none;filter:brightness(1.06)}
+.game-skin .draw-actions button:active:not(:disabled){filter:brightness(.9)}
+.game-skin .draw-actions button:disabled{opacity:.65}
+.game-skin .gacha-tool{border:0;box-shadow:none;background:transparent}
+.game-skin #contents-button .tool-symbol,.game-skin .gacha-tool[data-view="history"] .tool-symbol{font-size:0;width:64px;height:64px;display:block;background-position:center;background-repeat:no-repeat;background-size:contain}
+.game-skin #contents-button .tool-symbol{background-image:var(--native-contents)}
+.game-skin #contents-button:active .tool-symbol{background-image:var(--native-contentsPressed)}
+.game-skin .gacha-tool[data-view="history"] .tool-symbol{background-image:var(--native-history)}
+.game-skin .gacha-tool[data-view="history"]:active .tool-symbol{background-image:var(--native-historyPressed)}
+.game-skin .gacha-tool[data-view="collection"] .tool-symbol{display:none}
+.game-skin .results-dialog .reward-card{animation:none}
+@font-face{font-family:IdentityVOriginal;src:url('/game-ui/pop1w5.ttf') format('truetype');font-display:swap}
+.game-skin .box-item strong,.game-skin .stage h2,.game-skin .gacha-tool,.game-skin .draw-actions button,.game-skin .draw-actions #draw-ten{font-family:IdentityVOriginal,Georgia,"Times New Roman",serif;font-style:normal;font-weight:400}
+.game-skin .stage-stats{background:#08090b80;width:fit-content;padding:4px 10px}
+@media(max-width:1100px){.game-skin .draw-actions button,.game-skin .draw-actions #draw-ten{height:125px;font-size:1.5rem;padding-bottom:34px}}
+@media(max-width:800px){.game-skin .draw-actions button,.game-skin .draw-actions #draw-ten{height:105px;font-size:1.3rem;padding:0 4px 28px}.game-skin .draw-actions{gap:8px}.game-skin #contents-button .tool-symbol,.game-skin .gacha-tool[data-view="history"] .tool-symbol{width:32px;height:32px}}
+@media(max-width:500px){.game-skin .draw-actions button,.game-skin .draw-actions #draw-ten{height:66px;font-size:1rem;padding:0 2px 18px}.game-skin .draw-actions{gap:2px}.game-skin .stage-stats{padding:3px 5px}.game-skin #contents-button .tool-symbol,.game-skin .gacha-tool[data-view="history"] .tool-symbol{width:25px;height:25px}}

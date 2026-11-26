@@ -1,0 +1,64 @@
+/* Original article frames/font: research/reward-widgets. Original ray/button
+   bindings: research/game-results/export.json. Layout/halo remain browser adapters. */
+.results-dialog{--result-core:#8398a3;--result-mid:#43697e;--result-halo:#173547;--result-edge:#050e15;--result-ray:#79a9c5;--result-glow:#8398a3;position:fixed;inset:0;margin:auto;width:100vw;max-width:none;height:100dvh;max-height:none;padding:0;border:0;border-radius:0;overflow:auto;color:#ede3c7;background:radial-gradient(ellipse at 50% 45%,var(--result-core) 0%,var(--result-mid) 30%,var(--result-halo) 58%,var(--result-edge) 84%,#030507 100%);box-shadow:none;isolation:isolate}
+.results-dialog[data-theme="gold"]{--result-core:#ae986a;--result-mid:#946923;--result-halo:#4e2f0a;--result-edge:#150b02;--result-ray:#cf9532;--result-glow:#ae986a}
+/* Blue reference: saturated cyan light, cobalt middle, near-black perimeter.
+   Explicit radii keep the pool of light compact instead of washing the canvas. */
+.results-dialog[data-theme="blue"]{--result-core:#0579a7;--result-mid:#064b83;--result-halo:#0a1933;--result-edge:#06080e;--result-ray:#1284bc;--result-glow:#0579a7;background:radial-gradient(ellipse 40vw 70vh at 50% 45%,var(--result-core) 0%,#0674a2 17%,var(--result-mid) 39%,var(--result-halo) 62%,var(--result-edge) 83%,#050508 100%)}
+.results-dialog::backdrop{background:#030305f5;backdrop-filter:none}
+/* The native reference has a broad, low-saturation light cloud. Rays emerge
+   outside it rather than alternating all the way into a white pin point. */
+.results-dialog:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 5%,var(--result-ray) 38%,var(--result-ray) 66%,transparent 100%);mask:url('/game-results/result-rays.svg') center calc(50% - 5dvh)/cover no-repeat;opacity:.46;z-index:-1}
+.results-dialog:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,var(--result-glow) 0%,color-mix(in srgb,var(--result-glow) 88%,transparent) 12%,color-mix(in srgb,var(--result-glow) 38%,transparent) 27%,transparent 44%);z-index:-1}
+.results-dialog[data-theme="blue"]:before{background:radial-gradient(ellipse 40vw 70vh at 50% 45%,transparent 4%,#0f8ec7 24%,#1459a3 44%,#10316a80 62%,transparent 83%);opacity:.36}
+.results-dialog[data-theme="blue"]:after{background:radial-gradient(ellipse 40vw 70vh at 50% 45%,#0579a7 0%,#0579a7cc 10%,#0579a738 25%,transparent 40%)}
+/* Oversized ray plane rotates around the same fixed light center. The ambient
+   illumination and all reward controls remain stationary. */
+.results-dialog:before{position:fixed;inset:auto;left:50%;top:45%;width:200vmax;height:200vmax;mask-position:center;mask-size:100% 100%;background:radial-gradient(ellipse 65vw 95vh at center,transparent 5%,var(--result-ray) 38%,var(--result-ray) 66%,transparent 100%);transform:translate(-50%,-50%);animation:result-ray-turn 90s linear infinite}
+.results-dialog[data-theme="blue"]:before{background:radial-gradient(ellipse 40vw 70vh at center,transparent 4%,#0f8ec7 24%,#1459a3 44%,#10316a80 62%,transparent 83%)}
+@keyframes result-ray-turn{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.results-dialog:before{animation:none}}
+.results-heading{position:relative;display:flex;align-items:center;justify-content:center;padding:3vh 24px;color:#e7dbb8}
+.results-heading h2{font:400 clamp(1.1rem,2vw,2rem) Georgia,serif;letter-spacing:.03em;text-shadow:0 2px 4px #000;margin:0}
+.results-heading .close{position:absolute;right:3%;top:2vh;color:#dfd3b5;background:none;min-height:44px;min-width:44px}
+.results-grid{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,3.4vw,64px);width:min(72vw,1250px);margin:4vh auto 2vh;align-items:center;justify-items:center}
+.results-grid[data-count="1"]{grid-template-columns:minmax(0,1fr);width:min(24vw,230px);margin-top:9vh}
+.result-card{position:relative;width:100%;max-width:180px;aspect-ratio:2/3;background:none!important;padding:0;border:0;border-radius:0;box-shadow:none;transform:none;color:#f3e9d1;animation:result-arrive .3s both;animation-delay:calc(var(--i)*45ms);overflow:visible;min-height:0}
+.native-reward{position:absolute;left:50%;top:50%;width:var(--native-width);aspect-ratio:var(--native-ratio);transform:translate(-50%,-50%);display:block;isolation:isolate;pointer-events:none}
+.native-reward .native-frame{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;z-index:0}
+.native-reward .native-icon{position:absolute;left:50%;top:50%;width:var(--icon-width);height:var(--icon-height);object-fit:contain;transform:translate(-50%,-50%);z-index:1}
+.native-reward:is(.q3,.q4,.q5,.q6){filter:drop-shadow(0 0 3px var(--native-color)) drop-shadow(0 0 7px var(--native-color))}
+.native-reward.type-1:is(.q4,.q5){filter:brightness(1.1) drop-shadow(0 0 5px var(--native-color)) drop-shadow(0 0 13px var(--native-color))}
+/* Emit light from the original frame silhouette; keep faces/Owned text crisp. */
+.results-dialog .native-reward.q4{--reward-bloom:#e01aff}
+.results-dialog .native-reward.q5{--reward-bloom:#ff9718}
+.results-dialog .native-reward:is(.q4,.q5){filter:drop-shadow(0 0 2px var(--reward-bloom)) drop-shadow(0 0 6px var(--reward-bloom)) drop-shadow(0 0 12px var(--reward-bloom))}
+.results-dialog .native-reward:is(.q4,.q5) .native-frame{filter:brightness(1.18) drop-shadow(0 0 3px var(--reward-bloom)) drop-shadow(0 0 6px var(--reward-bloom))}
+.results-dialog .native-reward.q5{filter:drop-shadow(0 0 2px #ffae35) drop-shadow(0 0 5px #ff9718b3)}
+.results-dialog .native-reward.q5 .native-frame{filter:brightness(1.12) drop-shadow(0 0 3px #ff9718) drop-shadow(0 0 7px #ff971880)}
+.results-dialog .native-reward.type-1:is(.q4,.q5) .native-icon{filter:brightness(1.12)}
+.native-owned{position:absolute;left:50%;top:44%;width:100%;transform:translate(-50%,-50%) rotate(-18deg);display:block;text-align:center;font:italic 700 clamp(.8rem,1.25vw,1.5rem)/1.15 IdentityVOriginal,Georgia,serif;color:#ffcf9f;-webkit-text-stroke:3px #21170f;paint-order:stroke fill;text-shadow:1px 2px 0 #21170f;z-index:5;pointer-events:none}
+.native-reward.type-1 .native-owned{top:43%}
+.native-reward .native-name{position:absolute;left:5%;width:90%;transform:translateY(-50%);font-size:clamp(.6rem,.8vw,1rem);line-height:1.05;text-align:center;color:var(--native-name-color);text-shadow:none;max-height:18%;overflow:hidden;z-index:2}
+.native-reward.type-1 .native-icon{z-index:1}
+.native-reward.type-1.q5 .native-name{text-shadow:0 1px 2px #000}
+.native-reward.type-6 .native-frame{z-index:2}
+.native-reward.type-9,.native-reward.type-10{transform:translate(-50%,-50%) rotate(2deg)}
+.native-missing{position:absolute;inset:0;display:grid;place-items:center;font-size:.75rem}
+.reward-art:has(.native-reward){height:auto;aspect-ratio:2/3;background:none;overflow:visible}
+.reward-art .tier,.reward-art .owned{z-index:3}
+.result-badge{position:absolute;right:0;top:0;font-size:clamp(.55rem,.75vw,.85rem);background:#251b19ed;border:1px solid #c4ae77;padding:3px 6px;color:#ead8a9;border-radius:2px}
+.result-card:hover{filter:brightness(1.15);background-color:transparent}
+.result-card:focus-visible{outline:3px solid white;outline-offset:6px}
+.results-footer{position:relative;text-align:center;padding:1vh 16px 3vh}
+.results-footer p{font-size:clamp(.65rem,.85vw,.95rem);color:#d2c4a5;margin:0 0 1vh}
+.results-footer>div{display:flex;justify-content:center;gap:20px}
+.results-footer button{flex:none;position:relative;width:clamp(140px,17vw,250px);height:clamp(65px,12vh,118px);padding:0 0 12px;border:0;background-color:transparent!important;background-position:center;background-repeat:no-repeat;background-size:100% 100%;font:italic 400 clamp(1rem,1.4vw,1.7rem) Georgia,serif;color:#31240e;transform:none}
+.results-footer .result-again{background-image:url('/game-results/again.png')}
+.results-footer .result-confirm{background-image:url('/game-results/confirm.png')}
+.results-footer button:is(:hover,:focus-visible,:active):not(:disabled){filter:brightness(1.12);background-color:transparent;background-position:center;background-repeat:no-repeat;background-size:100% 100%;transform:none;opacity:1}
+.results-footer .result-again:is(:hover,:focus-visible,:active):not(:disabled){background-image:url('/game-results/again.png')}
+.results-footer .result-confirm:is(:hover,:focus-visible,:active):not(:disabled){background-image:url('/game-results/confirm.png')}
+@keyframes result-arrive{from{opacity:0;translate:0 15px}to{opacity:1;translate:0 0}}
+@media(max-height:600px){.results-heading{padding:2vh 20px}.results-grid{width:min(66vw,1000px);gap:3vh 4vw;margin:2vh auto}.result-card{max-height:26vh;width:auto;height:26vh}.results-footer button{height:16vh}.results-grid[data-count="1"]{margin-top:5vh}.results-grid[data-count="1"] .result-card{height:40vh;max-height:40vh}.results-footer{padding:0 12px 2vh}}
+@media(prefers-reduced-motion:reduce){.result-card{animation:none}}

@@ -1,0 +1,21 @@
+{
+  "name": "identityv-essence-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "prepare:data": "python tools/split_web_data.py",
+    "build:pages": "node tools/build-pages.mjs",
+    "deploy:preview": "node tools/deploy-pages.mjs --preview",
+    "deploy:production": "node tools/deploy-pages.mjs --production",
+    "preview:pages": "wrangler pages dev .deploy/pages --ip 127.0.0.1 --port 4174"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "wrangler": "4.168.0"
+  }
+}

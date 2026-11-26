@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "idv-essencelab",
+  "pages_build_output_dir": "./.deploy/pages",
+  "compatibility_date": "2026-11-26"
+}
