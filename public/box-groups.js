@@ -36,9 +36,9 @@ export function boxTitle(box){
  if(boxFamily(box)==='season'&&box.displayEssence)return `Season ${boxSeason(box)} Essence ${box.displayEssence}`;
  if(!box.name?.startsWith('TID_'))return box.name;
  if(/DEATHNOTE/.test(box.nameTid))return 'Death Note Crossover Essence';
- if(/KENAN/.test(box.nameTid))return `Case Closed · Overseas #${box.id}`;
- if(/FURNITURE/.test(box.nameTid))return `Essence nội thất #${box.id}`;
- return `Essence${boxSeason(box)?' mùa '+boxSeason(box):''} · #${box.id}`;
+ if(/KENAN/.test(box.nameTid))return 'Case Closed';
+ if(/FURNITURE/.test(box.nameTid))return 'Essence nội thất';
+ return `Essence${boxSeason(box)?' mùa '+boxSeason(box):''}`;
 }
 export function boxFamily(box){
   const text=`${box.name||''} ${box.nameTid||''}`;

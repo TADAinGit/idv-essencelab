@@ -111,3 +111,5 @@ body.game-skin[data-page="library"] .gacha-tool[data-view="collection"]{display:
 #sphere-reset{font-size:.72rem;color:#c8bbab;font-variant-numeric:tabular-nums;white-space:nowrap}
 @media(max-width:1000px){body[data-page="library"] .topbar{gap:12px;padding-inline:2%}body[data-page="library"] .topbar nav{gap:10px}.sphere-wallet{gap:4px}.sphere-wallet img{width:28px;height:28px}.sphere-wallet>div{min-width:110px}#sphere-balance{font-size:.82rem}#sphere-reset{font-size:.65rem}}
 @media(max-width:760px){body[data-page="library"] .brand{font-size:.75rem;letter-spacing:.06em}body[data-page="library"] .topbar{gap:8px}body[data-page="library"] .topbar nav{gap:8px}.sphere-wallet>div{min-width:100px}#sphere-balance{font-size:.75rem}.header-actions{gap:6px!important}}
+
+.notice:empty{display:none!important}
