@@ -49,7 +49,7 @@ export async function buildPages(root=ROOT){
  }
  const generated={
   '_headers':`/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: no-referrer\n  X-Frame-Options: DENY\n  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/media/*\n  Cache-Control: public, max-age=31536000, immutable\n/data/v2/*\n  Cache-Control: no-cache\n/*.js\n  Cache-Control: no-cache\n/*.css\n  Cache-Control: no-cache\n/\n  Cache-Control: no-cache\n/collection\n  Cache-Control: no-cache\n/history\n  Cache-Control: no-cache\n`,
-  '_redirects':'/collection/ /collection 301\n/history/ /history 301\n',
+  '_redirects':'/collections /collection 301\n/collections/ /collection 301\n/collection/ /collection 301\n/history/ /history 301\n',
   'collection.html':await readFile(path.join(source,'index.html'),'utf8'),
   'history.html':await readFile(path.join(source,'index.html'),'utf8'),
   '404.html':'<!doctype html><html lang="vi"><meta charset="utf-8"><title>Không tìm thấy · EssenceLab</title><body><h1>Không tìm thấy trang</h1><p><a href="/">Về EssenceLab</a></p></body></html>'

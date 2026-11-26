@@ -4,6 +4,7 @@ import {readRoute,routePath} from '../public/routes.js';
 import {createServer} from '../server.mjs';
 test('real paths preserve collection/history and keep unknown/hidden pages out of navigation',()=>{
   assert.deepEqual(readRoute(new URL('http://localhost/collection')),{view:'collection'});
+  assert.deepEqual(readRoute(new URL('http://localhost/collections/')),{view:'collection'});
   assert.deepEqual(readRoute(new URL('http://localhost/history/')),{view:'history'});
   assert.deepEqual(readRoute(new URL('http://localhost/?essence=513')),{view:'library',essence:'513'});
   assert.equal(routePath('collection'),'/collection');assert.equal(routePath('history'),'/history');

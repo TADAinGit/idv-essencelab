@@ -8,7 +8,7 @@ Cloudflare Pages project: `idv-essencelab`.
 
 - Seasonal, crossover, COA, Memory Sphere and Rank collections with lazy loading.
 - Original game-derived UI, reward frames, audio and selected reference/user-supplied artwork.
-- Anonymous 300-draw wallet, six-hour refill and 24-hour inactivity expiration in browser storage.
+- Anonymous 1,000-draw wallet, six-hour refill and 24-hour inactivity expiration in browser storage.
 - Separate default/custom simulation counters, local collection/history and JSON export/import.
 - Season 1 Essence 1–5 show their top three skins over the Rank red curtain.
 

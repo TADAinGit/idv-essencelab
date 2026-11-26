@@ -1,6 +1,6 @@
 export function readRoute(location){
   const path=location.pathname.replace(/\/$/,'')||'/';
-  if(path==='/collection')return {view:'collection'};
+  if(['/collection','/collections'].includes(path))return {view:'collection'};
   if(path==='/history')return {view:'history'};
   return {view:'library',essence:new URLSearchParams(location.search).get('essence')};
 }

@@ -18,7 +18,7 @@ export function createServer() {
       if(url.includes('\0')||url.includes('\\'))throw Error('Invalid path');
       const raw = /^\/assets\/raw\/[a-f0-9]{32}\.[a-z0-9]+$/i.test(url);
       const base = raw ? root : path.join(root,'public');
-      const pageRoute=['/','/collection','/collection/','/history','/history/'].includes(url);
+      const pageRoute=['/','/collection','/collection/','/collections','/collections/','/history','/history/'].includes(url);
       if(url==='/assets'||url==='/assets/')throw Error('Asset browser is temporarily hidden');
       const file = path.resolve(base,'.'+(pageRoute?'/index.html':url));
       if(!file.startsWith(base+path.sep))throw Error('Outside public root');

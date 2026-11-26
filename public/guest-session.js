@@ -1,7 +1,7 @@
 // Anonymous browser session. Wallet and game save commit as one storage record.
 export const SESSION_KEY='identityv.essencelab.guest.v1';
 export const LEGACY_KEY='identityv.essencelab.sandbox.v1';
-export const CAPACITY=300, REFILL_MS=6*60*60*1000, IDLE_MS=24*60*60*1000;
+export const CAPACITY=1000, REFILL_MS=6*60*60*1000, IDLE_MS=24*60*60*1000;
 const valid=r=>r?.version===1&&typeof r.id==='string'&&Number.isFinite(r.lastSeen)&&Number.isFinite(r.refillAt)&&Number.isInteger(r.balance)&&r.balance>=0&&r.balance<=CAPACITY&&[r.save,r.backup].every(v=>v===null||typeof v==='string');
 export class GuestSession{
  constructor(storage,{now=()=>Date.now(),id=()=>crypto.randomUUID(),lock=action=>globalThis.navigator?.locks? navigator.locks.request(SESSION_KEY,action):action()}={}){this.storage=storage;this.now=now;this.id=id;this.lock=lock;}
@@ -28,7 +28,7 @@ export class GuestSession{
  async draw(count,makeSave){
   if(count!==1&&count!==10)throw Error('Chỉ hỗ trợ mở 1 hoặc 10 lượt.');
   return this.run(async r=>{
-   if(r.balance<count)throw Error(`Không đủ cầu. Cần ${count} cầu; số dư được nạp lại thành 300 mỗi 6 giờ.`);
+   if(r.balance<count)throw Error(`Không đủ cầu. Cần ${count} cầu; số dư được nạp lại thành ${CAPACITY} mỗi 6 giờ.`);
    const batch=await makeSave(r.save);
    r.save=JSON.stringify(batch.state);r.balance-=count;
    return {batch,session:structuredClone(r)};
