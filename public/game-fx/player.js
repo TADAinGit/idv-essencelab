@@ -49,10 +49,10 @@ export async function playOpening({count=1,essenceImage=null,grade=1,reducedMoti
   dialog.style.cssText='position:fixed;inset:0;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:rgba(7,5,10,.97);color:#f1e3bd;overflow:hidden;';
   const bounds=document.querySelector('.workspace')?.getBoundingClientRect();if(bounds){Object.assign(dialog.style,{left:bounds.x+'px',top:bounds.y+'px',right:'auto',bottom:'auto',width:bounds.width+'px',height:bounds.height+'px',background:'rgba(7,5,10,.62)'});}
   const title=document.createElement('h2');title.id='native-gacha-title';title.textContent='Đang mở Essence';title.style.cssText='position:absolute;top:20px;left:24px;font:24px Georgia,serif;z-index:2;';
-  const label=document.createElement('p');label.textContent='Bỏ qua để xem ngay kết quả.';label.style.cssText='position:absolute;bottom:18px;left:24px;right:130px;font:14px/1.5 Segoe UI,sans-serif;color:#c8c1b4;z-index:2;';
-  const button=document.createElement('button');button.type='button';button.textContent='Bỏ qua';button.setAttribute('aria-label','Bỏ qua animation mở Essence');button.style.cssText='position:absolute;right:24px;bottom:20px;min-width:90px;min-height:44px;border:1px solid #d7bd84;background:#191712;color:#f1e3bd;padding:10px 16px;z-index:3;';
+  const label=document.createElement('p');label.id='native-gacha-hint';label.textContent='Bấm vào màn hình để bỏ qua hiệu ứng và xem kết quả. Có thể dùng Enter, phím cách hoặc Escape.';dialog.setAttribute('aria-describedby',label.id);label.style.cssText='position:absolute;bottom:18px;left:24px;right:130px;font:14px/1.5 Segoe UI,sans-serif;color:#c8c1b4;z-index:2;';
+
   const canvas=document.createElement('canvas');canvas.width=1722;canvas.height=750;canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:contain;';
-  dialog.append(canvas,title,label,button);document.body.append(dialog);
+  dialog.append(canvas,title,label);document.body.append(dialog);
   const ctx=canvas.getContext('2d');
   if(!ctx){dialog.remove();throw Error('Browser không hỗ trợ Canvas2D.');}
   const tint=document.createElement('canvas'),tintContext=tint.getContext('2d');
@@ -84,8 +84,8 @@ export async function playOpening({count=1,essenceImage=null,grade=1,reducedMoti
     let request=0,finished=false;
     const start=performance.now();
     function finish(skipped){if(finished)return;finished=true;cancelAnimationFrame(request);audio?.finish(skipped);dialog.close();dialog.remove();document.body.classList.remove('gacha-playing');resolve({skipped,capabilities,gradeApplied:true,source:documentData.source});}
-    button.addEventListener('click',()=>finish(true));dialog.addEventListener('cancel',event=>{event.preventDefault();finish(true);});
-    document.body.classList.add('gacha-playing');dialog.dataset.tone=Number(grade)>=4?'gold':'blue';dialog.showModal();button.focus();
+    dialog.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();finish(true);});dialog.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();finish(true);}});dialog.addEventListener('cancel',event=>{event.preventDefault();finish(true);});
+    document.body.classList.add('gacha-playing');dialog.dataset.tone=Number(grade)>=4?'gold':'blue';dialog.showModal();dialog.focus();
     audio?.playOpening();
     function frame(now){
       if(finished)return;

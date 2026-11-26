@@ -20,7 +20,7 @@ body[data-page="library"] .nav{font-size:.9rem;min-height:40px;padding:7px 12px}
 body[data-page="library"] .notice{position:fixed;bottom:0;left:0;right:0;height:20px;min-height:0;padding:2px 12px;font-size:.65rem;background:#08090bc9!important;z-index:6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 body[data-page="library"] .workspace{position:relative;width:min(100vw,calc((100dvh - 48px)*2.296));height:min(calc(100dvh - 48px),43.554vw);max-width:none;min-height:0;padding:0;margin:max(0px,calc((100dvh - 48px - 43.554vw)/2)) auto;display:block;isolation:isolate;background:var(--native-background) center/cover no-repeat;overflow:hidden}
 body[data-page="library"] .workspace:before,body[data-page="library"] .workspace:after{display:none}
-body[data-page="library"] .library-panel{position:absolute;left:4%;top:12%;bottom:22%;width:19%;height:auto;min-height:0;padding:0;display:flex;flex-direction:column;z-index:6}
+body[data-page="library"] .library-panel{position:absolute;left:var(--library-left,4%);top:12%;bottom:22%;width:var(--library-width,19%);height:auto;min-height:0;padding:0;display:flex;flex-direction:column;z-index:6}
 body[data-page="library"] .panel-title,body[data-page="library"] .sidebar-footer,body[data-page="library"] .list-count{display:none}
 body[data-page="library"] .library-filters{position:absolute;bottom:100%;left:0;right:0;z-index:6;margin:0;border:0;font-size:.7rem}
 body[data-page="library"] .library-filters>summary{min-height:26px;padding:3px;color:#e0d2b8}
@@ -133,10 +133,10 @@ body.game-skin[data-page="library"] .gacha-tool[data-view="collection"]{display:
 }
 
 /* Clickable native-style progress copy, separate from the draw controls. */
-body[data-page="library"] .progress-toggle{left:1.6%;bottom:3%;width:29%;max-width:29%;min-height:44px;border:0;border-radius:3px;padding:4px 4px 4px 18px;background:transparent;text-align:center;font-family:inherit;font-style:italic;font-size:clamp(.7rem,1.05vw,1.1rem);font-weight:400;line-height:1.4;color:#d9ceb9;text-shadow:0 1px 3px #000;letter-spacing:0}
+body[data-page="library"] .progress-toggle{left:var(--library-left,4%);bottom:3%;width:var(--library-width,19%);max-width:var(--library-width,19%);min-height:44px;border:0;border-radius:3px;padding:4px 10px;background:transparent;text-align:center;font-family:inherit;font-style:italic;font-size:clamp(.7rem,1.05vw,1.1rem);font-weight:400;line-height:1.4;color:#d9ceb9;text-shadow:0 1px 3px #000;letter-spacing:0}
 body[data-page="library"] .progress-toggle:hover:not(:disabled){background:#ffffff08}
 .progress-toggle .progress-arrow{position:absolute;left:1px;top:50%;transform:translateY(-50%);font-size:1.8em;color:#a99b86}
-.progress-toggle .progress-line{display:block}
+.progress-toggle .progress-line{display:block;text-wrap:balance}
 .progress-toggle .progress-s{color:#f3d45d}
 .progress-toggle .progress-a{color:#e579e5}
-@media(max-width:1100px) and (orientation:landscape){body[data-page="library"] .progress-toggle{bottom:2%;font-size:clamp(.65rem,1.25vw,.85rem);line-height:1.3;padding-left:12px}}
+@media(max-width:1100px) and (orientation:landscape){body[data-page="library"] .progress-toggle{bottom:2%;font-size:clamp(.65rem,1.25vw,.85rem);line-height:1.3;padding-inline:8px}}
